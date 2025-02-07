@@ -43,7 +43,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = "eu-east-1"
 }
 
 resource "aws_instance" "test_server" {
@@ -57,18 +57,39 @@ resource "aws_instance" "test_server" {
 `),
 			},
 			want: &Config{
-				RequiredProviders: nil,
-				Providers:         nil,
-				Resources:         nil,
-				Modules:           nil,
-				Variables:         nil,
-				Locals:            nil,
+				RequiredProviders: []*RequiredProvider{
+					{"aws", map[string]any{
+						"source":  "hashicorp/aws",
+						"version": "~> 5.0",
+					}},
+				},
+				Providers: []*Provider{
+					{"aws", map[string]any{
+						"region": "eu-east-1",
+					}},
+				},
+				Resources: []*Resource{
+					{
+						"aws_instance",
+						"test_server",
+						[]string{"aws_instance", "test_server"},
+						map[string]any{
+							"ami":           "ami-830c94e3",
+							"instance_type": "t2.micro",
+							"tags":          map[string]any{"Name": "example"},
+						},
+					},
+				},
+				Modules:   []*Module{},
+				Variables: nil,
+				Locals:    []*Local{},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := parseConfig(tt.args.file); !reflect.DeepEqual(got, tt.want) {
+				log.Panic().Any("v", got).Msg("asd")
 				t.Errorf("parseConfig() = %v, want %v", got, tt.want)
 			}
 		})

@@ -17,7 +17,7 @@ type tfParser struct {
 }
 
 func parseConfig(file *hcl.File) *Config {
-	requiredProviders := make([]*string, 0)
+	requiredProviders := make([]*RequiredProvider, 0)
 	providers := make([]*Provider, 0)
 	resources := make([]*Resource, 0)
 	modules := make([]*Module, 0)
@@ -28,7 +28,7 @@ func parseConfig(file *hcl.File) *Config {
 		case "terraform":
 			requiredProviders = parseTerraform(block)
 		case "provider":
-			modules = append(modules, parseModule(block))
+			providers = append(providers, parseProvider(block))
 		case "module":
 			modules = append(modules, parseModule(block))
 		case "resource":
@@ -98,23 +98,37 @@ func NewTfParser() Parser {
 	return &tfParser{}
 }
 
-func parseTerraform(block *hclsyntax.Block) []*string {
-	requiredProviders := make([]*string, 0)
+func parseTerraform(block *hclsyntax.Block) []*RequiredProvider {
+	requiredProviders := make([]*RequiredProvider, 0)
 
 	for _, block := range block.Body.Blocks {
 		switch block.Type {
 		case "required_providers":
 			for _, attribute := range block.Body.Attributes {
-				log.Warn().Msg(attribute.Name)
-				if attribute.Name == "required_providers" {
-					value := evaluateExpression(attribute.Expr)
-					log.Panic().Any("value", value).Msg("value")
+				rp := RequiredProvider{
+					Name:       attribute.Name,
+					Attributes: evaluateExpression(attribute.Expr).(map[string]any),
 				}
+				requiredProviders = append(requiredProviders, &rp)
 			}
 		}
 	}
 
 	return requiredProviders
+}
+
+func parseProvider(block *hclsyntax.Block) *Provider {
+	provider := &Provider{
+		Name:       block.Labels[0],
+		Attributes: map[string]any{},
+	}
+
+	for _, attribute := range block.Body.Attributes {
+		value := evaluateExpression(attribute.Expr)
+		provider.Attributes[attribute.Name] = value
+	}
+
+	return provider
 }
 
 func parseModule(block *hclsyntax.Block) *Module {

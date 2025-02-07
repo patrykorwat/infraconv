@@ -1,6 +1,12 @@
 package parser
 
-// Provider represents a Terraform provider.
+// RequiredProvider represents a Terraform required provider.
+type RequiredProvider struct {
+	Name       string
+	Attributes map[string]any
+}
+
+// Provider represents a Terraform provider configuration.
 type Provider struct {
 	Name       string
 	Attributes map[string]any
@@ -33,7 +39,7 @@ type Variable struct {
 
 // Config represents the Terraform configuration.
 type Config struct {
-	RequiredProviders []*string
+	RequiredProviders []*RequiredProvider
 	Providers         []*Provider
 	Resources         []*Resource
 	Modules           []*Module
