@@ -11,8 +11,8 @@
 package tf
 
 import (
-	internalConverter "github.com/patrykorwat/crossplaner/internal/converter"
-	"github.com/patrykorwat/crossplaner/internal/format"
+	internalConverter "github.com/patrykorwat/infraconv/internal/converter"
+	"github.com/patrykorwat/infraconv/internal/format"
 )
 
 type Command struct {

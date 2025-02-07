@@ -13,7 +13,7 @@ package main
 import (
 	"github.com/alecthomas/kong"
 
-	"github.com/patrykorwat/crossplaner/cmd/crossplaner/tf"
+	"github.com/patrykorwat/infraconv/cmd/infraconv/tf"
 )
 
 type cli struct {
