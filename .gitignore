@@ -27,3 +27,5 @@ go.work.sum
 .terraform
 .terraform.lock*
 .idea
+
+test/manual/output

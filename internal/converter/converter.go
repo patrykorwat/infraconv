@@ -11,9 +11,9 @@
 package converter
 
 import (
-	"fmt"
 	"github.com/patrykorwat/infraconv/internal/format"
 	internalParser "github.com/patrykorwat/infraconv/internal/parser"
+	transformer "github.com/patrykorwat/infraconv/internal/transformer"
 	"github.com/pkg/errors"
 )
 
@@ -35,38 +35,11 @@ func (c converter) Convert() error {
 		return errors.Wrap(err, "parsing error")
 	}
 
-	// Print resources
-	fmt.Println("Resources:")
-	for _, resource := range config.Resources {
-		fmt.Printf("Type: %s, Name: %s\n", resource.Type, resource.Name)
-		for key, value := range resource.Attributes {
-			fmt.Printf("    %s: %v\n", key, value)
-		}
-	}
+	crossplane := transformer.NewCrossplaneTransformer()
 
-	// Print modules
-	fmt.Println("\nModules:")
-	for _, module := range config.Modules {
-		fmt.Printf("Source: %s\n", module.Source)
-		for key, value := range module.Attributes {
-			fmt.Printf("    %s: %v\n", key, value)
-		}
-	}
-
-	// Print variables
-	fmt.Println("\nVariables:")
-	for _, variable := range config.Variables {
-		for key, value := range variable.Attributes {
-			fmt.Printf("    %s: %v\n", key, value)
-		}
-	}
-
-	// Print locals
-	fmt.Println("\nLocals:")
-	for _, local := range config.Locals {
-		for key, value := range local.Attributes {
-			fmt.Printf("    %s: %v\n", key, value)
-		}
+	err = crossplane.Transform(config, "test/manual/output")
+	if err != nil {
+		return errors.Wrap(err, "transform error")
 	}
 
 	return nil
