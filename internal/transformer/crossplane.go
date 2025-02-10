@@ -23,7 +23,7 @@ func (c crossplaneTransformer) Transform(cfg *parser.Config, directoryOutput str
 		return errors.Wrap(err, "parsing error")
 	}
 	ec2.Configure(provider)
-	log.Info().Int("len", len(p.Resources)).Msg("Found resources")
+	log.Info().Int("len", len(provider.Resources)).Msg("Found resources")
 	return nil
 }
 
