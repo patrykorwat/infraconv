@@ -11,18 +11,35 @@
 package main
 
 import (
+	"fmt"
 	"github.com/alecthomas/kong"
+	"runtime/debug"
 
 	"github.com/patrykorwat/infraconv/cmd/infraconv/tf"
 )
 
+type (
+	versionFlag bool
+)
+
 type cli struct {
+	Version versionFlag `help:"Print version and quit." short:"v"`
+
 	Tf tf.Command `cmd:"" help:"Run a job to convert infrastructure definitions from Terrraform."`
+}
+
+// GOLANG 1.24 - Feat 4: main module version
+func (v versionFlag) BeforeApply(app *kong.Kong) error { //nolint:unparam // BeforeApply requires this signature.
+	info, _ := debug.ReadBuildInfo()
+	fmt.Println("Go version:", info.GoVersion)
+	fmt.Println("App version:", info.Main.Version)
+	app.Exit(0)
+	return nil
 }
 
 func main() {
 	ctx := kong.Parse(&cli{},
-		kong.Name("crossplaner"),
+		kong.Name("infraconv"),
 		kong.Description("A handy tool to convert infra definitions"),
 		kong.UsageOnError(),
 	)

@@ -18,12 +18,16 @@ func (c crossplaneTransformer) Transform(cfg *parser.Config, directoryOutput str
 	//	Resources: make(map[string]*config.Resource),
 	//}
 	ctx := context.Background()
-	provider, err := config.GetProvider(ctx, false)
+	awsProvider, err := config.GetProvider(ctx, false)
 	if err != nil {
 		return errors.Wrap(err, "parsing error")
 	}
-	ec2.Configure(provider)
-	log.Info().Int("len", len(provider.Resources)).Msg("Found resources")
+
+	ec2.Configure(awsProvider) // awsProvider size is substantial
+
+	// GOLANG 1.24 - Feat 3: SwissTable: 958 elements, almost will switch to SwissTable https://abseil.io/about/design/swisstables
+	log.Info().Int("len", len(awsProvider.Resources)).Msg("Found resources")
+
 	return nil
 }
 
