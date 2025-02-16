@@ -1,6 +1,6 @@
 module github.com/patrykorwat/infraconv
 
-go 1.24rc2
+go 1.24
 
 // GOLANG 1.24 - Feat 1: Tool dependencies
 // go get -tool github.com/vektra/mockery/v2@v2.20.0
@@ -17,6 +17,8 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/upbound/provider-aws v1.20.0
 	github.com/zclconf/go-cty v1.16.2
+	k8s.io/apimachinery v0.30.0
+	k8s.io/cli-runtime v0.28.2
 )
 
 require (
@@ -362,6 +364,7 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattbaird/jsonpatch v0.0.0-20240118010651-0ba75a80ca38 // indirect
@@ -429,7 +432,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/api v0.30.0 // indirect
 	k8s.io/apiextensions-apiserver v0.30.0 // indirect
-	k8s.io/apimachinery v0.30.0 // indirect
 	k8s.io/client-go v0.30.0 // indirect
 	k8s.io/component-base v0.30.0 // indirect
 	k8s.io/klog/v2 v2.120.1 // indirect
@@ -445,4 +447,3 @@ require (
 replace github.com/hashicorp/terraform-plugin-log => github.com/gdavison/terraform-plugin-log v0.0.0-20230928191232-6c653d8ef8fb
 
 replace github.com/hashicorp/terraform-provider-aws => github.com/upbound/terraform-provider-aws v0.0.0-20250109090836-986571bdb591
-

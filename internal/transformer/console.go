@@ -1,6 +1,7 @@
 package transformer
 
 import (
+	"context"
 	"fmt"
 	"github.com/patrykorwat/infraconv/internal/parser"
 )
@@ -8,7 +9,7 @@ import (
 type consoleTransformer struct {
 }
 
-func (c consoleTransformer) Transform(config *parser.Config, directoryOutput string) error {
+func (c consoleTransformer) Transform(ctx context.Context, config *parser.Config, directoryOutput string) error {
 	// Print resources
 	fmt.Println("Resources:")
 	for _, resource := range config.Resources {

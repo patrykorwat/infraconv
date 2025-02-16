@@ -11,6 +11,7 @@
 package converter
 
 import (
+	"context"
 	"github.com/patrykorwat/infraconv/internal/format"
 	internalParser "github.com/patrykorwat/infraconv/internal/parser"
 	transformer "github.com/patrykorwat/infraconv/internal/transformer"
@@ -36,8 +37,8 @@ func (c converter) Convert() error {
 	}
 
 	crossplane := transformer.NewCrossplaneTransformer()
-
-	err = crossplane.Transform(config, "test/manual/output")
+	ctx := context.Background()
+	err = crossplane.Transform(ctx, config, "test/manual/output")
 	if err != nil {
 		return errors.Wrap(err, "transform error")
 	}
