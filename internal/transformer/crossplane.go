@@ -51,7 +51,7 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 		if knownType, ok := awsScheme.AllKnownTypes()[gvk]; ok {
 			specField, _ := knownType.FieldByName("Spec")
 			forProviderField, _ := specField.Type.FieldByName("ForProvider")
-			parametersInstance := reflect.New(forProviderField.Type)
+			parametersInstance := reflect.New(forProviderField.Type).Interface()
 
 			marshal, err := json.TFParser.Marshal(resource.Attributes)
 			if err != nil {
@@ -64,6 +64,9 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 				return errors.Wrap(err, "cannot convert TF json")
 			}
 			log.Info().Any("transformedResource", parametersInstance).Msg("transformed resource")
+
+			transformedResourceBytes, _ := json.JSParser.Marshal(parametersInstance)
+			log.Info().Any("transformedResource", string(transformedResourceBytes)).Msg("transformed resource")
 
 			convertedResource := &unstructured.Unstructured{}
 			convertedResource.SetUnstructuredContent(map[string]interface{}{
