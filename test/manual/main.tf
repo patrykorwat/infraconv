@@ -18,6 +18,10 @@ resource "aws_instance" "test_server" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "example"
+    Name = "infraconv-test-ec2-instance"
   }
+}
+
+resource "aws_s3_bucket" "test-bucket" {
+  bucket = "infraconv-test-bucket"
 }

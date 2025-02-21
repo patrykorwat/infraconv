@@ -38,6 +38,13 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 	// GOLANG 1.24 - Feat 3: SwissTable: 958 elements, almost will switch to SwissTable https://abseil.io/about/design/swisstables
 	log.Info().Int("len", len(awsProvider.Resources)).Msg("Found resources")
 
+	newFile, err := os.Create("converted-resources.yaml")
+	defer newFile.Close()
+	if err != nil {
+		return errors.Wrap(err, "Cannot create output file")
+	}
+	y := printers.YAMLPrinter{}
+
 	for _, resource := range cfg.Resources {
 		if _, ok := awsProvider.Resources[resource.Type]; !ok {
 			return errors.New("Couldn't find resource type: " + resource.Type)
@@ -76,12 +83,14 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 			})
 			convertedResource.SetGroupVersionKind(gvk)
 
-			newFile, err := os.Create("converted-resources.yaml")
-			if err != nil {
-				return errors.Wrap(err, "Cannot create output file")
+			if cfg, ok := config.TerraformPluginSDKExternalNameConfigs[resource.Type]; ok {
+				if len(cfg.IdentifierFields) == 1 {
+					if _, ok := resource.Attributes[cfg.IdentifierFields[0]]; ok {
+						convertedResource.SetName(resource.Attributes[cfg.IdentifierFields[0]].(string))
+					}
+				}
 			}
-			y := printers.YAMLPrinter{}
-			defer newFile.Close()
+
 			err = y.PrintObj(convertedResource, newFile)
 			if err != nil {
 				return errors.Wrap(err, "Cannot print converted resource")
