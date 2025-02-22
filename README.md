@@ -1,6 +1,8 @@
 # infraconv
 Convert between infrastructure definition frameworks.
 
+Tool for now only works for AWS provider.
+
 Supported source formats:
 * Terraform/OpenTofu
 
