@@ -45,6 +45,8 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 	}
 	y := printers.YAMLPrinter{}
 
+	region := cfg.Providers[0].Attributes["region"].(string)
+
 	for _, resource := range cfg.Resources {
 		if _, ok := awsProvider.Resources[resource.Type]; !ok {
 			return errors.New("Couldn't find resource type: " + resource.Type)
@@ -58,7 +60,12 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 		if knownType, ok := awsScheme.AllKnownTypes()[gvk]; ok {
 			specField, _ := knownType.FieldByName("Spec")
 			forProviderField, _ := specField.Type.FieldByName("ForProvider")
-			parametersInstance := reflect.New(forProviderField.Type).Interface()
+			newType := reflect.New(forProviderField.Type)
+			parametersInstance := newType.Interface()
+			regionField := newType.Elem().FieldByName("Region")
+			if regionField.IsValid() && regionField.CanSet() {
+				regionField.Set(reflect.ValueOf(&region))
+			}
 
 			marshal, err := json.TFParser.Marshal(resource.Attributes)
 			if err != nil {

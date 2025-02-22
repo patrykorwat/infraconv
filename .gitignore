@@ -29,3 +29,5 @@ go.work.sum
 .idea
 
 test/manual/output
+
+converted-resources.yaml
