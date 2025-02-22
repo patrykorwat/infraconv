@@ -31,7 +31,7 @@ func (c converter) Convert() error {
 	default:
 		return errors.New("Unsupported source format: " + c.source.String())
 	}
-	config, err := parser.Parse("test/manual")
+	config, err := parser.Parse("test/manual-ref")
 	if err != nil {
 		return errors.Wrap(err, "parsing error")
 	}
