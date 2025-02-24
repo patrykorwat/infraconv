@@ -60,3 +60,8 @@ spec:
   forProvider:
     region: us-west-2
 ```
+
+Things to consider when passing TF files:
+1. Modules are not supported
+2. References aren't supported
+3. Boolean fields can only contain boolean values,`true` or `false`, string values like`"true"` aren't supported

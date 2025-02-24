@@ -214,7 +214,7 @@ func buildVarExpressions(traversal hcl.Traversal) string {
 	return strings.Join(varExp, ".")
 }
 
-func convertValueToString(val cty.Value) string {
+func convertValue(val cty.Value) interface{} {
 	switch val.Type() {
 	case cty.Number:
 		return val.AsBigFloat().String()
@@ -224,7 +224,7 @@ func convertValueToString(val cty.Value) string {
 		var v bool
 		_ = gocty.FromCtyValue(val, &v)
 
-		return fmt.Sprintf("%v", v)
+		return v
 	default:
 		log.Warn().Str("type", val.Type().GoString()).Msg("unsupported type")
 		return ""
@@ -239,7 +239,7 @@ func evaluateExpression(expr hcl.Expression) any {
 	case *hclsyntax.ScopeTraversalExpr:
 		resultString += buildVarExpressions(expr.Traversal)
 	case *hclsyntax.LiteralValueExpr:
-		resultString += convertValueToString(expr.Val)
+		return convertValue(expr.Val)
 	case *hclsyntax.TemplateExpr:
 		parts := expr.Parts
 		for _, part := range parts {
