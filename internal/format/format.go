@@ -13,11 +13,6 @@ package format
 //go:generate go tool stringer -type=Format
 type Format int
 
-// GOLANG 1.24 - Feat 2: Generic type aliases
-// type Format = int
-// var nF int = 0
-// var ww Format = nF
-
 const (
 	Terraform Format = iota
 	Crossplane

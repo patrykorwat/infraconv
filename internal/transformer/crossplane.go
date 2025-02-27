@@ -35,7 +35,6 @@ func (c crossplaneTransformer) Transform(ctx context.Context, cfg *parser.Config
 		return errors.Wrap(err, "cannot add schemes")
 	}
 
-	// GOLANG 1.24 - Feat 3: SwissTable: 958 elements, almost will switch to SwissTable https://abseil.io/about/design/swisstables
 	log.Info().Int("len", len(awsProvider.Resources)).Msg("Found resources")
 
 	newFile, err := os.Create("converted-resources.yaml")
