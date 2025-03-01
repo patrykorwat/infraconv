@@ -2,8 +2,6 @@ module github.com/patrykorwat/infraconv
 
 go 1.24
 
-// GOLANG 1.24 - Feat 1: Tool dependencies
-// go get -tool github.com/vektra/mockery/v2@v2.20.0
 tool (
 	github.com/vektra/mockery/v2
 	golang.org/x/tools/cmd/stringer

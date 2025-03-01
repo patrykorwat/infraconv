@@ -28,8 +28,7 @@ type cli struct {
 	Tf tf.Command `cmd:"" help:"Run a job to convert infrastructure definitions from Terrraform."`
 }
 
-// GOLANG 1.24 - Feat 2: main module version
-func (v versionFlag) BeforeApply(app *kong.Kong) error { //nolint:unparam // BeforeApply requires this signature.
+func (v versionFlag) BeforeApply(app *kong.Kong) error {
 	info, _ := debug.ReadBuildInfo()
 	fmt.Println("Go version:", info.GoVersion)
 	fmt.Println("App version:", info.Main.Version)
